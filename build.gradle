@@ -1,0 +1,62 @@
+apply plugin: 'groovy'
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'maven'
+
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+}
+
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/acceptance_test_framework']
+        }
+        resources {}
+    }
+
+    test {
+        java {
+            srcDirs = ['src/acceptance_tests']
+        }
+        resources {}
+    }
+}
+
+
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+
+compileJava {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+}
+
+dependencies {
+
+    compile 'io.github.prashant-ramcharan:courgette-jvm:2.4.0'
+
+    compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '2.41.0'
+
+}
+tasks.withType(Test) {
+    systemProperties = System.getProperties()
+}
+
+// JUnit
+task regressionSuite(type: Test) {
+    include 'ScenarioSuite.class'
+
+    outputs.upToDateWhen { false }
+}
+
+
